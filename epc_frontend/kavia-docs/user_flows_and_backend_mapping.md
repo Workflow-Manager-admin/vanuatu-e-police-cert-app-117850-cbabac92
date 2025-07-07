@@ -18,6 +18,8 @@ This document audits all currently implemented user features, screens, and flows
   - [Approve/Reject Applications](#approvereject-applications)
 - [Feature Mapping Table](#feature-mapping-table)
 - [Summary of Integration Gaps & Notes](#summary-of-integration-gaps--notes)
+- [Comparison Against Backend API Documentation](#comparison-against-backend-api-documentation)
+- [Concrete Recommendations](#concrete-recommendations)
 
 ---
 
@@ -111,12 +113,50 @@ This document audits all currently implemented user features, screens, and flows
 
 ---
 
-## Recommendations
+## Comparison Against Backend API Documentation
 
-- All API utility functions in `api.js` require refactoring to use real endpoints and response formats documented in the backend spec.
-- UI should support correct and complete application data structures as per backend models.
-- Consider implementing missing admin features for certificate upload and multi-app management.
-- Synchronize all application status logic and download links with real backend status/links.
+The following section highlights all major mappings and gaps as determined by cross-referencing the audited React frontend codebase with the backend endpoint documentation (`api_endpoints.md`):
+
+### What is fully mapped/implemented:
+- All *core user flows* (registration, login, application form, applicant/admin dashboard, status tracking, admin approve/reject) exist in some form in the UI, corresponding to real backend API endpoints.
+- Screens use modular React functional components with clear separation per flow.
+
+### Missing or Mock-Only Integration
+
+| Feature                                      | Frontend UI Status            | Backend API Status                                   | Gaps / Needs Integration                   |
+|-----------------------------------------------|-------------------------------|-----------------------------------------------------|---------------------------------------------|
+| User registration/login                      | UI present (mocked only)      | Fully implemented (`/auth/register`, `/auth/login`)  | Switch all calls to use real REST backend with error handling. Use backend token/roles. |
+| Certificate application                      | Form UI present (mocked only) | Implemented (`POST /epc/application`)                | Send real data to backend. Attach bearer token. |
+| Application status display                   | Mocked/random logic only      | Implemented (`GET /epc/application`, `/epc/application/{app_id}`) | Must fetch real user list + app details and present actual status. |
+| Certificate download (PDF)                   | UI link exists; not functional| Implemented (`GET /epc/certificate/{app_id}/download`)| Download actual file from backend based on app_id and status. |
+| Admin: list all applications                 | Table UI (mock only)          | Implemented (`GET /admin/applications`)              | Populate with real backend data.            |
+| Admin: approve/reject application            | Buttons/handler, mock only    | Implemented (`POST /admin/application/{app_id}/decision`) | Implement real PATCH/POST to backend with payload and token. |
+| Admin: upload certificate (PDF)              | Not currently in UI           | Implemented (`POST /admin/application/{app_id}/upload-certificate`) | Add admin UI for PDF upload.                |
+| User/applicant can have multiple applications| Not supported in UI           | Implemented in backend with listing endpoint         | Extend UI to display/apply for multiple applications. |
+| User info/profile fetch                      | Not present in UI             | `/auth/me` implemented                               | Call for context and correct roles, show user details where relevant. |
+| User role logic                              | Guessed by UI                 | Proper flag via backend (`is_admin`)                 | Trust backend; update local logic so role is based on backend. |
+| Application list (per applicant, per admin)  | Single-app logic only         | Multi-application support in backend                 | Add lists where user may have >1 application. |
+
+### General Gaps
+
+- **All API functions in `api.js` are using development-only logic and not calling the backend at all.**
+- **No networking (fetch/axios) to backend on any user or admin flow.**
+- **Token is not actually sent in Authorization header for authenticated routes.**
+- **Admin cannot upload certificates in UI.**
+- **No UI for `/auth/me` or "user profile," including role trust from backend.**
+- **No user-facing error handling for permission/403/401 from backend (all handled as mock errors).**
+
+---
+
+## Concrete Recommendations
+
+- Refactor all API utility functions in `api.js` to use `fetch` or similar to make real requests to the backend URLs, matching request/response formats, passing bearer token in headers.
+- Make UI state and role trust the backend's user model (`/auth/me`) not guesses from email.
+- Implement multi-application support and lists for both applicants and admins.
+- Ensure certificate download and upload work via backend using blob/file APIs.
+- Integrate all error handling based on actual backend HTTP responses.
+- Add an admin interface for certificate PDF upload.
+- Provide user details/profile fetched via backend.
 
 ---
 
@@ -127,5 +167,7 @@ This document audits all currently implemented user features, screens, and flows
 - `/src/pages/StatusTracker.js`
 - `/src/pages/AdminDashboard.js`
 - `/src/api.js`
+
+**This mapping is based on backend (`api_endpoints.md`) as of the same date.**
 
 _This document was auto-generated for audit and integration planning._
