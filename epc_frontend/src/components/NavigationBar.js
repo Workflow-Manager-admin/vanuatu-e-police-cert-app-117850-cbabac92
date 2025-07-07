@@ -2,7 +2,9 @@ import React from "react";
 
 // PUBLIC_INTERFACE
 function NavigationBar({ user, onLogout }) {
-  /** NavigationBar provides top navigation for the app, adapting to user/admin roles */
+  /**
+   * Modern minimal NavigationBar: brand left, nav/actions right, with contextual menus (dashboard, apply, status, admin, etc)
+   */
   return (
     <nav
       style={{
@@ -10,16 +12,39 @@ function NavigationBar({ user, onLogout }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "0.8rem 1.8rem",
-        background: "var(--primary, #1366d6)",
-        color: "#fff",
-        boxShadow: "0 2px 8px rgba(34,46,69,0.03)"
+        minHeight: 54,
+        padding: "0.7rem 1.8rem 0.7rem 1rem",
+        background: "var(--bg-nav,#fff)",
+        boxShadow: "0 1px 8px #222e4520",
+        borderBottom: "1.5px solid var(--border-color,#e4e8ef)",
+        position: "relative",
+        zIndex: 21,
       }}
     >
-      <span style={{ fontWeight: 700, fontSize: "1.25rem" }}>
-        <span style={{ color: "var(--accent, #27ae60)" }}>Vanuatu</span> Certificate
+      <span style={{
+        fontWeight: 800,
+        fontSize: "1.3rem",
+        letterSpacing: "-0.5px",
+        color: "var(--secondary,#222e45)",
+        display: "flex",
+        alignItems: "center",
+      }}>
+        <span style={{
+          color: "var(--primary,#1366d6)",
+          fontWeight: 700,
+          fontSize: "1.1em",
+          letterSpacing: "-1px",
+          marginRight: 6
+        }}>Vanuatu</span>
+        <span style={{color: "var(--accent,#27ae60)", fontWeight: 700}}>EPC</span>
+        <span style={{
+          fontWeight: 500,
+          color: "#666",
+          marginLeft: 12,
+          fontSize: "0.96em",
+        }}>Police Certificate</span>
       </span>
-      <div style={{ display: "flex", gap: 20 }}>
+      <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
         {user && user.role === "applicant" && (
           <>
             <a href="/dashboard" style={navLinkStyle}>Dashboard</a>
@@ -39,7 +64,9 @@ function NavigationBar({ user, onLogout }) {
           </>
         )}
         {user && (
-          <button style={logoutBtnStyle} onClick={onLogout}>Logout</button>
+          <button style={logoutBtnStyle} onClick={onLogout} aria-label="Logout">
+            Logout
+          </button>
         )}
       </div>
     </nav>
@@ -47,25 +74,38 @@ function NavigationBar({ user, onLogout }) {
 }
 
 const navLinkStyle = {
-  color: "#fff",
+  color: "var(--primary,#1366d6)",
   textDecoration: "none",
-  fontWeight: 500,
-  opacity: 0.92,
-  transition: "opacity 0.2s",
-  fontSize: "1rem"
+  fontWeight: 600,
+  background: "none",
+  border: "none",
+  fontSize: "1.05rem",
+  letterSpacing: 0,
+  opacity: 0.91,
+  transition: "opacity 0.18s, color 0.18s",
+  padding: "3px 11px",
+  borderRadius: "6px",
+  display: "inline-block",
+};
+navLinkStyle['hover'] = {
+  opacity: 1,
+  textDecoration: "underline",
+  background: "#eee"
 };
 
 const logoutBtnStyle = {
-  background: "var(--accent, #27ae60)",
+  background: "var(--accent,#27ae60)",
   border: "none",
   color: "#fff",
   borderRadius: "6px",
-  padding: "5px 16px",
-  fontWeight: 600,
-  fontSize: "1rem",
+  padding: "7px 18px",
+  fontWeight: 700,
+  fontSize: "1.02em",
   marginLeft: "6px",
   cursor: "pointer",
   boxShadow: "none",
+  letterSpacing: "0.03em",
+  transition: "background 0.17s"
 };
 
 export default NavigationBar;

@@ -1,4 +1,3 @@
-/* Theme & Brand Colors */
 :root {
   --primary: #1366d6;
   --accent: #27ae60;
@@ -6,18 +5,26 @@
 
   --bg-primary: #f8f9fa;
   --bg-secondary: #fff;
+  --bg-nav: #ffffff;
+  --bg-footer: #e5eef8;
+
   --text-primary: #222e45;
   --text-secondary: #555a8d;
+  --text-light: #fff;
+  --text-nav: #222e45;
 
   --border-color: #e4e8ef;
   --button-bg: var(--primary);
   --button-text: #fff;
+  --button-radius: 7px;
   --danger: #e74c3c;
   --success: #27ae60;
+
+  --shadow-sm: 0 1px 10px #222e451a;
+  --shadow-md: 0 2px 14px #1366d60d, 0 0.7px 3px #222e4529;
 }
 
 [data-theme="dark"] {
-  /* Dark theme colors */
   --bg-primary: #1a1a22;
   --bg-secondary: #222e45;
   --text-primary: #ffffff;
@@ -31,37 +38,41 @@ body,
 .App {
   background: var(--bg-primary);
   color: var(--text-primary);
+  margin: 0;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 .App {
   min-height: 100vh;
-  transition: background 0.4s, color 0.4s;
+  transition: background 0.3s, color 0.3s;
 }
 
 .App-header {
-  padding: 0;
-  background: var(--bg-primary);
-  box-shadow: 0 1px 10px #222e4522;
-  display: block;
+  background: var(--bg-nav, #fff);
+  box-shadow: var(--shadow-sm);
   min-height: unset;
   transition: background 0.3s;
   position: relative;
+  padding: 0;
+  z-index: 10;
 }
 
+/* Theme toggle button */
 .theme-toggle {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 13px;
+  right: 16px;
   background: var(--secondary);
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 8px 18px;
+  padding: 7px 17px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   z-index: 99;
-  opacity: .94;
+  opacity: .93;
   transition: all 0.2s;
 }
 .theme-toggle:hover {
@@ -69,28 +80,28 @@ body,
   background: var(--primary);
 }
 
-/* Centered containers for forms/pages */
+/* Card containers */
 .center-container {
   width: 100%;
   max-width: 430px;
   margin: 38px auto 0 auto;
   padding: 34px 8px 18px 8px;
-  background: var(--bg-secondary,#fff);
+  background: var(--bg-secondary);
   border-radius: 1rem;
-  box-shadow: 0 2px 14px #1366d60d, 0 0.5px 1px #222e452c;
+  box-shadow: var(--shadow-md);
   min-height: 80px;
 }
 
 .dash-container {
   max-width: 690px;
   margin: 40px auto 0;
-  background: var(--bg-secondary,#fff);
+  background: var(--bg-secondary);
   border-radius: 1.2rem;
-  box-shadow: 0 1px 10px #222e4535;
+  box-shadow: var(--shadow-sm);
   padding: 2.2rem 2.2rem 1.2rem 2.2rem;
 }
 
-/* Minimal modern Auth card */
+/* Auth and Forms */
 .auth-card {
   display: flex;
   flex-direction: column;
@@ -99,7 +110,7 @@ body,
 }
 .auth-card h2 {
   font-weight: 600;
-  margin: 0 0 10px 0;
+  margin: 0 0 10px;
   font-size: 2rem;
   color: var(--primary);
   letter-spacing: -.5px;
@@ -127,6 +138,8 @@ body,
   outline: 2px solid var(--primary);
   border-color: var(--primary)!important;
 }
+
+/* Button styles */
 .btn-primary,
 .btn-success, 
 .btn-reject {
@@ -135,39 +148,42 @@ body,
   background: var(--primary);
   color: #fff!important;
   border: none;
-  border-radius: 7px;
+  border-radius: var(--button-radius);
   font-size: 1.08rem;
   font-weight: 700;
   padding: 10px 0;
-  box-shadow: 0 1px 5px #1366d605;
+  box-shadow: 0 1px 5px #1366d607;
   cursor: pointer;
   letter-spacing: .3px;
   transition: background 0.18s;
 }
-.btn-primary:hover { background: var(--accent);}
+
+.btn-primary:hover { background: var(--accent); opacity: 0.96; }
 .btn-success {
   margin-top: 0;
   width: auto;
-  background: var(--success)!
-  important;
+  background: var(--success)!important;
 }
-.btn-success:hover { background: #1b934e;}
+.btn-success:hover { background: #1b934e; }
 .btn-reject {
   margin-top: 0;
   width: auto;
   background: var(--danger)!important;
 }
-.btn-reject:hover { background: #c54d42;}
+.btn-reject:hover { background: #c54d42; }
 
+/* Muted/app links */
 .muted-link {
-  color: var(--primary,#1366d6);
+  color: var(--primary, #1366d6);
   text-decoration: none;
   opacity: 0.84;
   font-weight: 500;
   font-size: 1rem;
+  transition: opacity 0.18s;
 }
 .muted-link:hover { opacity: 1; text-decoration: underline; }
 
+/* Alerts, error/warn info messages */
 .alert-message {
   padding: 18px 20px;
   color: var(--danger,#e74c3c);
@@ -179,6 +195,7 @@ body,
   font-size: 1.11em;
 }
 
+/* Main forms (application, status, etc) */
 .main-form {
   display: flex;
   flex-direction: column;
@@ -214,11 +231,12 @@ body,
   border-color: var(--primary)!important;
 }
 
+/* Table and Dashboard */
 .main-table {
   width: 100%;
   border-radius: 12px;
   font-size: 1rem;
-  background: var(--bg-secondary,#fff);
+  background: var(--bg-secondary);
   overflow: auto;
   margin-bottom: 1.5rem;
   box-shadow: 0 1px 4px #1366d60c;
@@ -228,9 +246,10 @@ body,
 .main-table th, .main-table td {
   padding: 13px 13px 11px 13px;
   text-align: left;
+  font-weight: 400;
 }
 .main-table th {
-  color: var(--accent,#27ae60);
+  color: var(--accent, #27ae60);
   background: #f8f9fa;
   font-weight: 600;
   font-size: 1.06em;
@@ -242,26 +261,41 @@ body,
   background: #e8f4fb;
 }
 
-/* Notification: see Notification.js for styling */
+/* Notification popup position styling handled in component */
 
-/* Responsive styles */
+/* Responsiveness for mobile/tablet */
+@media (max-width: 900px) {
+  .dash-container {
+    padding: 1.1rem 3vw 1rem 3vw;
+  }
+}
 @media (max-width: 768px) {
   .App-header {
     padding: 0 2vw;
   }
   .dash-container, .center-container {
     padding: 20px 4vw;
-    min-width: unset;
     max-width: 100vw;
     border-radius: 0.7em;
-    margin: 1vw auto 0 auto;
+    margin: 2vw auto 0 auto;
   }
   .main-form, .auth-card {
     padding: 0;
   }
   .main-table th, .main-table td {
-    padding: 9px 4px;
+    padding: 10px 6px;
     font-size: 0.98em;
   }
 }
-
+@media (max-width: 480px) {
+  .App-header {
+    min-height: 0;
+    padding: 0 1vw;
+  }
+  .dash-container,
+  .center-container {
+    padding: 10px 2vw;
+    margin-top: 0.7rem;
+    border-radius: 0.5em;
+  }
+}
